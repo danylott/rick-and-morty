@@ -11,13 +11,17 @@ from characters.models import Character
 from characters.serializers import CharacterSerializer
 
 
+def get_random_character() -> Character:
+    pks = Character.objects.values_list("pk", flat=True)
+    random_pk = random.choice(pks)
+    return Character.objects.get(pk=random_pk)
+
+
 @extend_schema(responses={status.HTTP_200_OK: CharacterSerializer})
 @api_view(["GET"])
 def get_random_character_view(request: Request) -> Response:
     """Get random character from Rick & Morty world"""
-    pks = Character.objects.values_list("pk", flat=True)
-    random_pk = random.choice(pks)
-    random_character = Character.objects.get(pk=random_pk)
+    random_character = get_random_character()
     serializer = CharacterSerializer(random_character)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
