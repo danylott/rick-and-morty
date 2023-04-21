@@ -9,6 +9,7 @@ from rest_framework.response import Response
 
 from characters.models import Character
 from characters.serializers import CharacterSerializer
+from pagination import CharactersListPagination
 
 
 def get_random_character() -> Character:
@@ -28,6 +29,7 @@ def get_random_character_view(request: Request) -> Response:
 
 class CharacterListView(generics.ListAPIView):
     serializer_class = CharacterSerializer
+    pagination_class = CharactersListPagination
 
     def get_queryset(self) -> QuerySet:
         queryset = Character.objects.all()
